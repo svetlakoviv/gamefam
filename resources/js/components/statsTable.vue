@@ -57,15 +57,23 @@ th, td {
 }
 
 th {
+    background-color: #c0c0c0;
+}
+
+tr:nth-child(odd) {
     background-color: #f2f2f2;
 }
 
+tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
 .table-title {
-    text-align: center;       /* Center the text */
-    font-size: 24px;          /* Make the text bigger */
-    font-weight: bold;        /* Make the text bold */
-    margin: 20px 0;           /* Add some margin to separate it from other elements */
-    color: #333;              /* Change the text color */
-    font-family: Arial, sans-serif;  /* Change the font family */
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 20px 0;
+    color: #333;
+    font-family: Arial, sans-serif;
 }
 </style>

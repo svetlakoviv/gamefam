@@ -1,0 +1,25 @@
+#app {
+    display: flex;
+    flex-direction: column;
+}
+
+.stats-container {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.stats-chart-wrapper {
+    width: 70%;
+    margin-right: 10px;
+    border: 1px solid black;
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.stats-table-wrapper {
+    width: 30%;
+    border: 1px solid black;
+    border-radius: 4px;
+}

@@ -1,17 +1,16 @@
 <template>
-    <div>
+    <div class="input-container">
+        <div class="button-container">
+            <button @click="fetchData">Fetch Data</button>
+            <button @click="exportToCSV">Export to CSV</button>
+        </div>
         <label for="from">From:</label>
         <input type="date" id="from" v-model="fromDate" >
 
         <label for="to">To:</label>
         <input type="date" id="to" v-model="toDate" >
-
-        <div class="button-container">
-            <button @click="fetchData">Fetch Data</button>
-            <button @click="exportToCSV">Export to CSV</button>
-        </div>
-        <highcharts :options="chartOptions"></highcharts>
      </div>
+    <highcharts :options="chartOptions"></highcharts>
 </template>
 
 <script>
@@ -38,7 +37,7 @@ export default {
                     }
                 },
                 chart: {
-                    backgroundColor: '#f0f0f0'
+                    //backgroundColor: '#f0f0f0'
                 }
             }
         };
@@ -121,8 +120,19 @@ button:hover {
     background-color: #0056b3;
 }
 
+input {
+    margin-right: 10px;
+}
+
 .button-container {
     display: flex;
-    gap: 10px; /* Adjust the value as needed */
+    gap: 10px;
+    margin-right: 10px;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }
 </style>
