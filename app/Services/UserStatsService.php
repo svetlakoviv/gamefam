@@ -98,7 +98,7 @@ class UserStatsService
             if($dayCounter > static::MAX_DAYS) {
                 break;
             }
-            $tableData[$row['date']] = ['max' => $row->max_users, 'avg' => floor($row->avg_users)];
+            $tableData[$row->date] = ['max' => $row->max_users, 'avg' => floor($row->avg_users)];
         }
 
         return $tableData;
