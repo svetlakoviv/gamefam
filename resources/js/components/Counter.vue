@@ -1,6 +1,6 @@
 <template>
     <div>
-        <p v-if="userStat">The user count is: {{ userStat.online_users }}</p>
+        <p style="font-size: 48px;" v-if="online_users">{{ online_users }} users online</p>
         <p v-else>Loading...</p>
     </div>
 </template>
@@ -10,7 +10,7 @@ export default {
     name: 'LatestUserStat',
     data() {
         return {
-            userStat: null,
+            online_users: null,
             interval: null
         };
     },
@@ -26,7 +26,7 @@ export default {
             try {
                 let response = await fetch('/latest');
                 let data = await response.json();
-                this.userStat = data;
+                this.online_users = data;
             } catch (error) {
                 console.error('Error fetching latest user stat:', error);
             }

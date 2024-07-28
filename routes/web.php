@@ -13,4 +13,4 @@ Route::get('/latest', [UserStatsController::class, 'latest']);
 
 Route::get('/table', [UserStatsController::class, 'table']);
 
-Route::get('/export', [UserStatsController::class, 'exportToCSV']);
+Route::get('/export/{from?}/{to?}', [UserStatsController::class, 'exportToCSV']);

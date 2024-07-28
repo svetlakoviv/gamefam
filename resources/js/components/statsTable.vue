@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Data Table</h1>
+        <h2 class="table-title">Average and Max values for 1 week</h2>
         <table>
             <thead>
             <tr>
@@ -58,5 +58,14 @@ th, td {
 
 th {
     background-color: #f2f2f2;
+}
+
+.table-title {
+    text-align: center;       /* Center the text */
+    font-size: 24px;          /* Make the text bigger */
+    font-weight: bold;        /* Make the text bold */
+    margin: 20px 0;           /* Add some margin to separate it from other elements */
+    color: #333;              /* Change the text color */
+    font-family: Arial, sans-serif;  /* Change the font family */
 }
 </style>

@@ -3,76 +3,45 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserStats;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Services\UserStatsService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class UserStatsController extends Controller
 {
     const TEN_MINUTES = 600;
 
-    public function stats($from = null, $to = null): \Illuminate\Database\Eloquent\Collection
+    public function stats(UserStatsService $service, $from = null, $to = null): Collection
     {
-        $query = UserStats::query();
-
-        if ($from) {
-            $query->where('created_at', '>=', Carbon::parse($from)->startOfDay());
-        }
-
-        if ($to) {
-            $query->where('created_at', '<=', Carbon::parse($to)->endOfDay());
-        }
-
-        if (!$from && !$to) {
-            $query->where('created_at', '>=', Carbon::now()->subDay());
-        }
-
-        return $query->get();
-    }
-
-    public function latest()
-    {
-        return Cache::remember('last_row', static::TEN_MINUTES, function () {
-            return UserStats::latest('created_at')->first();
+        return Cache::remember('stats_'.$from.$to, static::TEN_MINUTES, function () use ($service, $from, $to) {
+            return $service->getUserStatsFromDB($from, $to);
         });
     }
 
-    public function table(): array
+    public function latest(UserStatsService $service)
     {
-        $tableData = [];
-        /**
-         * "2024-07-24" => ['avg' => 1600, 'max' => '2100'],
-         * "2024-07-25" => ['avg' => 1700, 'max' => '2200'],
-         * "2024-07-26" => ['avg' => 1800, 'max' => '2300']
-         */
-
-        $data = UserStats::query()->select('date', DB::raw('max(online_users) as max_users'), DB::raw('avg(online_users) as avg_users'))
-            ->groupBy('date')
-            ->orderBy('date', 'desc')
-            ->get();
-
-        foreach ($data as $row) {
-            $tableData[$row['date']] = ['max' => $row->max_users, 'avg' => floor($row->avg_users)];
-        }
-
-        return $tableData;
+        //if we already have it cached, then return this instead
+        return Cache::remember('online_users', static::TEN_MINUTES, function () use ($service) {
+            return $service->loadUserStats();
+        });
     }
 
-    public function exportToCSV(): \Illuminate\Http\Response
+    public function table(UserStatsService $service): array
     {
-        $yesterday = Carbon::now()->subDays();
-        $data = UserStats::where('created_at', '>=', $yesterday)->get()->toArray();
+        return Cache::remember('table_data', static::TEN_MINUTES, function () use ($service) {
+            return $service->getTableData();
+        });
+    }
 
-        $csvData = "Date,Online Users\n";
-        foreach ($data as $values) {
-            $csvData .= "{$values['created_at']},{$values['online_users']}\n";
-        }
+    public function exportToCSV(UserStatsService $service, $from = null, $to = null): \Illuminate\Http\Response
+    {
+        //NOTE: we don't cache the csv generation!
+        $csv = $service->generateCSV($from, $to);
 
+        //create file for download
         $filename = 'data-' . time() . '.csv';
-        $response = Response::make($csvData);
+        $response = Response::make($csv);
         $response->header('Content-Type', 'text/csv');
         $response->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
 

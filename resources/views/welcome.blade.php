@@ -20,7 +20,6 @@
         <div id="app">
             <counter></counter>
             <stats-chart></stats-chart>
-            <stats-export></stats-export>
             <stats-table></stats-table>
         </div>
 

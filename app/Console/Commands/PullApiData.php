@@ -2,13 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\UserStats;
-use GuzzleHttp\Client;
+use App\Services\UserStatsService;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 
 class PullApiData extends Command
 {
-    const LINK = 'https://origins.habbo.com/api/public/origins/users';
     /**
      * The name and signature of the console command.
      *
@@ -25,27 +24,16 @@ class PullApiData extends Command
 
     /**
      * Execute the console command.
+     *
+     * @throws GuzzleException
      */
-    public function handle(Client $client, UserStats $userStats)
+    public function handle(UserStatsService $service): int
     {
         //try to get information from the LINK
-        $response = $client->get(static::LINK);
+        $result = $service->loadUserStatsAndSaveToDB();
 
         //on success we save it to UserStats
-        //dd($response->getStatusCode());
-
-        if ($response->getStatusCode() === 200) {
-            $data = $response->getBody()->getContents();
-            $data = json_decode($data, true);
-            //dd($data);
-            $onlineUsers = $data['onlineUsers'];
-            // Process and insert data into the database
-
-            $userStats = new UserStats();
-            $userStats->online_users = $onlineUsers;
-            $userStats->save();
-
-
+        if (!empty($result)) {
             $this->info('Data pulled and inserted successfully.');
         } else {
             $this->error('Failed to pull data from API.');
