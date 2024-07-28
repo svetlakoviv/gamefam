@@ -1,16 +1,18 @@
 <template>
-    <div class="input-container">
-        <div class="button-container">
-            <button @click="fetchData">Fetch Data</button>
-            <button @click="exportToCSV">Export to CSV</button>
-        </div>
-        <label for="from">From:</label>
-        <input type="date" id="from" v-model="fromDate" >
+    <div>
+        <div class="input-container">
+            <div class="button-container">
+                <button @click="fetchData">Fetch Data</button>
+                <button @click="exportToCSV">Export to CSV</button>
+            </div>
+            <label for="from">From:</label>
+            <input type="date" id="from" v-model="fromDate" >
 
-        <label for="to">To:</label>
-        <input type="date" id="to" v-model="toDate" >
-     </div>
-    <highcharts :options="chartOptions"></highcharts>
+            <label for="to">To:</label>
+            <input type="date" id="to" v-model="toDate" >
+         </div>
+        <highcharts :options="chartOptions"></highcharts>
+    </div>
 </template>
 
 <script>
@@ -38,8 +40,13 @@ export default {
                 },
                 chart: {
                     //backgroundColor: '#f0f0f0'
+                },
+                accessibility: {
+                    enabled: false,
                 }
-            }
+            },
+            fromDate: '',
+            toDate: '',
         };
     },
     created() {

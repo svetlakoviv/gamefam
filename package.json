@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^5.1.0",
+        "highcharts-accessibility": "^0.1.7",
         "highcharts-vue": "^2.0.1",
         "vue": "^3.4.34"
     }

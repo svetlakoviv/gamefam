@@ -1,4 +1,4 @@
-# Laravel Project
+# Gamefam home assessment 
 
 ## Introduction
 This is a Laravel project designed to demonstrate various features and functionalities. Follow the steps below to set up and run the project on your local machine.
