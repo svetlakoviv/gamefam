@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class UserStatsServiceTest extends TestCase
 {
-    protected $userStatsService;
+    protected UserStatsService $userStatsService;
 
     protected function setUp(): void
     {

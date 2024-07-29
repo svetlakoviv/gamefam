@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         fetchData() {
-            fetch('/table') // Replace with your actual API endpoint
+            fetch('/table')
                 .then(response => response.json())
                 .then(data => {
                     this.data = data;

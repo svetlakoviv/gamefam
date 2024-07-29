@@ -6,11 +6,11 @@
                 <button @click="exportToCSV">Export to CSV</button>
             </div>
             <label for="from">From:</label>
-            <input type="date" id="from" v-model="fromDate" >
+            <input type="date" id="from" v-model="fromDate">
 
             <label for="to">To:</label>
-            <input type="date" id="to" v-model="toDate" >
-         </div>
+            <input type="date" id="to" v-model="toDate">
+        </div>
         <highcharts :options="chartOptions"></highcharts>
     </div>
 </template>
@@ -37,9 +37,6 @@ export default {
                     dateTimeLabelFormats: {
                         hour: '%H:%M'
                     }
-                },
-                chart: {
-                    //backgroundColor: '#f0f0f0'
                 },
                 accessibility: {
                     enabled: false,
@@ -76,7 +73,6 @@ export default {
 
             fetch(`/export/${from}/${to}`)
                 .then(response => {
-                    // Ensure the response is valid
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
@@ -88,18 +84,18 @@ export default {
                         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|([^;\n]*))/;
                         const matches = filenameRegex.exec(disposition);
                         if (matches != null && matches[1]) {
-                            filename = matches[1].replace(/['"]/g, ''); // Clean the filename
+                            filename = matches[1].replace(/['"]/g, '');
                         }
                     }
 
-                    return response.blob().then(blob => ({ filename, blob }));
+                    return response.blob().then(blob => ({filename, blob}));
                 })
-                .then(({ filename, blob }) => {
+                .then(({filename, blob}) => {
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.style.display = 'none';
                     a.href = url;
-                    a.download = filename; // Use the filename extracted from the response
+                    a.download = filename;
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);

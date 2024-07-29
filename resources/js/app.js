@@ -1,6 +1,6 @@
 import './bootstrap';
 
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import Counter from './components/Counter.vue'
 import HighchartsVue from 'highcharts-vue'
 import StatsChart from "./components/statsChart.vue";

@@ -15,7 +15,8 @@ class UserStatsService
     const MAX_DAYS = 7;
     private Client $client;
 
-    public function __construct(Client $client){
+    public function __construct(Client $client)
+    {
         $this->client = $client;
     }
 
@@ -45,20 +46,12 @@ class UserStatsService
     public function loadUserStatsAndSaveToDB(): ?int
     {
         $onlineUsers = $this->loadUserStats();
-        if(!empty($onlineUsers)){
+        if (!empty($onlineUsers)) {
             $this->saveUserStatsToDB($onlineUsers);
         }
         return $onlineUsers;
     }
 
-    private function saveUserStatsToDB($onlineUsers): void
-    {
-        $date = Carbon::now()->format('Y-m-d');
-        $userStats = new UserStats();
-        $userStats->online_users = $onlineUsers;
-        $userStats->date = $date;
-        $userStats->save();
-    }
 
     public function getUserStatsFromDB($from = null, $to = null): Collection
     {
@@ -66,22 +59,6 @@ class UserStatsService
         $query = $this->applyTimeWindow($query, $from, $to);
 
         return $query->get();
-    }
-
-    private function applyTimeWindow($query, $from, $to){
-        if ($from) {
-            $query->where('created_at', '>=', \Carbon\Carbon::parse($from)->startOfDay());
-        }
-
-        if ($to) {
-            $query->where('created_at', '<=', Carbon::parse($to)->endOfDay());
-        }
-
-        if (!$from && !$to) {
-            $query->where('created_at', '>=', Carbon::now()->subDay());
-        }
-
-        return $query;
     }
 
     public function getTableData(): array
@@ -95,7 +72,7 @@ class UserStatsService
         $dayCounter = 0;
         foreach ($data as $row) {
             $dayCounter++;
-            if($dayCounter > static::MAX_DAYS) {
+            if ($dayCounter > static::MAX_DAYS) {
                 break;
             }
             $tableData[$row->date] = ['max' => $row->max_users, 'avg' => floor($row->avg_users)];
@@ -116,5 +93,31 @@ class UserStatsService
         }
 
         return $csvData;
+    }
+
+    private function applyTimeWindow($query, $from, $to)
+    {
+        if ($from) {
+            $query->where('created_at', '>=', \Carbon\Carbon::parse($from)->startOfDay());
+        }
+
+        if ($to) {
+            $query->where('created_at', '<=', Carbon::parse($to)->endOfDay());
+        }
+
+        if (!$from && !$to) {
+            $query->where('created_at', '>=', Carbon::now()->subDay());
+        }
+
+        return $query;
+    }
+
+    private function saveUserStatsToDB($onlineUsers): void
+    {
+        $date = Carbon::now()->format('Y-m-d');
+        $userStats = new UserStats();
+        $userStats->online_users = $onlineUsers;
+        $userStats->date = $date;
+        $userStats->save();
     }
 }

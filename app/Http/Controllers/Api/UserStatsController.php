@@ -14,7 +14,7 @@ class UserStatsController extends Controller
 
     public function stats(UserStatsService $service, $from = null, $to = null): Collection
     {
-        return Cache::remember('stats_'.$from.$to, static::TEN_MINUTES, function () use ($service, $from, $to) {
+        return Cache::remember('stats_' . $from . $to, static::TEN_MINUTES, function () use ($service, $from, $to) {
             return $service->getUserStatsFromDB($from, $to);
         });
     }

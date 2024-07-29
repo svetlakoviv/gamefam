@@ -15,11 +15,11 @@ export default {
         };
     },
     mounted() {
-        this.fetchData(); // Fetch data immediately when the component is mounted
-        this.startFetching(); // Start fetching data at intervals
+        this.fetchData();
+        this.startFetching();
     },
     beforeDestroy() {
-        clearInterval(this.interval); // Clear the interval when the component is destroyed
+        clearInterval(this.interval);
     },
     methods: {
         async fetchData() {
@@ -33,8 +33,8 @@ export default {
         },
         startFetching() {
             this.interval = setInterval(() => {
-                this.fetchData(); // Fetch data every 5 seconds
-            }, 5000); // 5000 milliseconds = 5 seconds
+                this.fetchData();
+            }, 5000); //5 seconds
         }
     }
 };
